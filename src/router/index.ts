@@ -10,8 +10,8 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/index",
     name: "index",
-    component: () => import ("@/views/Index.vue"),
-  }
+    component: () => import("@/views/Index.vue"),
+  },
 ];
 
 const router = createRouter({
