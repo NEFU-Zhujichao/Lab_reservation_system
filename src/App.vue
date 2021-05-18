@@ -1,23 +1,12 @@
 <template>
   <div id="nav">
-    <router-link to="/">Login</router-link>
-    <br />
-    <router-link to="/index">index</router-link>
+    <router-view :key="$route.path" />
   </div>
-  <router-view />
 </template>
 
 <style>
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+/* 修改登录页面的表单中验证码和图片不对其的问题*/
+.el-form-item__content {
+  display: flex;
 }
 </style>

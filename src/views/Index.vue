@@ -14,24 +14,15 @@
       <tr>
         <td>1 2</td>
         <td>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
-          <div>可用：<input type="checkbox" /></div>
+          可用：<input type="checkbox" /> 可用：<input type="checkbox" />
+          可用：<input type="checkbox" /> 可用：<input type="checkbox" />
+          可用：<input type="checkbox" /> 可用：<input type="checkbox" />
+          可用：<input type="checkbox" /> 可用：<input type="checkbox" />
+          可用：<input type="checkbox" /> 可用：<input type="checkbox" />
+          可用：<input type="checkbox" /> 可用：<input type="checkbox" />
+          可用：<input type="checkbox" /> 可用：<input type="checkbox" />
+          可用：<input type="checkbox" />可用：<input type="checkbox" />
+          可用：<input type="checkbox" /> 可用：<input type="checkbox" />
         </td>
         <td>
           <div>可用：<input type="checkbox" /></div>
