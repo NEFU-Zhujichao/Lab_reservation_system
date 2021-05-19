@@ -5,6 +5,10 @@
       ref="form"
       :model="loginFormRef"
       class="loginContainer"
+      v-loading="loading"
+      element-loading-text="正在登录"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
     >
       <h3 class="loginTitle">实验室预约系统登录</h3>
       <el-form-item prop="username">
@@ -12,7 +16,6 @@
           type="text"
           v-model="loginFormRef.username"
           placeholder="请输入用户名"
-          autocomplete="false"
         ></el-input>
       </el-form-item>
       <el-form-item prop="password">
@@ -20,7 +23,6 @@
           type="password"
           v-model="loginFormRef.password"
           placeholder="请输入密码"
-          autocomplete="false"
         ></el-input>
       </el-form-item>
       <el-form-item prop="code" style="display: flex; align-items: center">
@@ -28,7 +30,6 @@
           type="text"
           v-model="loginFormRef.code"
           placeholder="点击图片更换验证码"
-          autocomplete="false"
           style="width: 230px; margin-right: 5px"
         ></el-input>
         <img :src="captchaUrl" @click="updateCaptcha" />
@@ -44,6 +45,8 @@
 import AppVue from "@/App.vue";
 import { defineComponent, ref, Ref } from "vue";
 import { ElMessage } from "element-plus";
+import axios from "@/axios/index";
+import { useRouter } from "vue-router";
 
 interface LoginForm {
   username: string;
@@ -60,6 +63,7 @@ function useCaptcha(captcha: Ref<string>) {
 }
 export default defineComponent({
   setup(refs) {
+    const router = useRouter();
     const loginForm: LoginForm = {
       username: "admin",
       password: "123",
@@ -68,6 +72,7 @@ export default defineComponent({
     const captchaUrl = ref("/captcha?time=" + new Date());
     const loginFormRef = ref(loginForm);
     const checked = ref(true);
+    const loading = ref(false);
     const rules = {
       username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
       password: [{ required: true, message: "请输入密码", trigger: "blur" }],
@@ -75,9 +80,16 @@ export default defineComponent({
     };
     const rulesRef = ref(rules);
     function submitLogin() {
-      if (loginFormRef.value.username == "admin")
-        ElMessage.success("用户名正确");
-      else ElMessage.error("用户名错误");
+      loading.value = true;
+      axios.post("/login", loginFormRef.value).then((resp) => {
+        if (resp) {
+          loading.value = false;
+          const auth = resp.data.tokenHead + " " + resp.data.token;
+          sessionStorage.setItem("auth", auth);
+          sessionStorage.setItem("tokenHeader", resp.data.tokenHeader);
+          router.replace("/index");
+        }
+      });
     }
     const { updateCaptcha } = useCaptcha(captchaUrl);
     return {
@@ -87,6 +99,7 @@ export default defineComponent({
       submitLogin,
       rulesRef,
       updateCaptcha,
+      loading,
     };
   },
 });
