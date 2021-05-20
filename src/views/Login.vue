@@ -65,8 +65,8 @@ export default defineComponent({
   setup(refs) {
     const router = useRouter();
     const loginForm: LoginForm = {
-      username: "admin",
-      password: "123",
+      username: "",
+      password: "",
       code: "",
     };
     const captchaUrl = ref("/captcha?time=" + new Date());
