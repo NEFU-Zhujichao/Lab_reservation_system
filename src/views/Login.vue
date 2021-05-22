@@ -65,8 +65,8 @@ export default defineComponent({
   setup(refs) {
     const router = useRouter();
     const loginForm: LoginForm = {
-      username: "",
-      password: "",
+      username: "admin",
+      password: "123",
       code: "",
     };
     const captchaUrl = ref("/captcha?time=" + new Date());
@@ -82,8 +82,9 @@ export default defineComponent({
     function submitLogin() {
       loading.value = true;
       axios.post("/login", loginFormRef.value).then((resp) => {
+        // 不管正确返回结果与否都应该让登录的加载动画消失
+        loading.value = false;
         if (resp) {
-          loading.value = false;
           const auth = resp.data.tokenHead + " " + resp.data.token;
           sessionStorage.setItem("auth", auth);
           sessionStorage.setItem("tokenHeader", resp.data.tokenHeader);
@@ -117,6 +118,7 @@ export default defineComponent({
 }
 .loginTitle {
   text-align: center;
+  padding: 10px 15px;
 }
 .loginRemember {
   text-align: left;

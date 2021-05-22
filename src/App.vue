@@ -9,4 +9,9 @@
 .el-form-item__content {
   display: flex;
 }
+
+* {
+  margin: 0px;
+  padding: 0px;
+}
 </style>

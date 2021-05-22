@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import Login from "../views/Login.vue";
+import {Role} from '@/store/type'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -16,13 +17,18 @@ const routes: Array<RouteRecordRaw> = [
         path: "test1",
         name: "test1",
         component: () => import("@/views/Test1.vue"),
-      },{
+      },
+      {
         path: "test2",
         name: "test2",
         component: () => import("@/views/Test2.vue"),
+      },
+      {
+        path: "labs",
+        component: () => import("@/views/admin/lab/LabManagement.vue")
       }
     ]
-  },
+  }
 ];
 
 const router = createRouter({
@@ -31,3 +37,30 @@ const router = createRouter({
 });
 
 export default router;
+
+/*const adminRoutes: Array<RouteRecordRaw> = [
+  {
+    path: "/test1",
+    component: () => import("@/views/Test1.vue"),
+  },
+  {
+    path: "/test2",
+    component: () => import("@/views/Test2.vue"),
+  }
+];
+
+export function updateRoutes() {
+  hasAdminRole(sessionStorage.getItem("user"));
+}
+
+export function hasAdminRole(user: any){
+  user = JSON.parse(user);
+  user.roles.forEach((r: Role) => {
+    if(r.name == 'ADMIN'){
+      adminRoutes.forEach(route => {
+        router.addRoute(route);
+      })
+    }
+  })
+}
+updateRoutes();*/

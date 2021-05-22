@@ -2,6 +2,8 @@ import axios from "axios";
 import { ElMessage } from "element-plus";
 import router from "@/router";
 
+axios.defaults.baseURL = '/api/';
+
 // 请求拦截器
 axios.interceptors.request.use(config => {
     const auth = sessionStorage.getItem('auth');
@@ -24,6 +26,7 @@ axios.interceptors.response.use(
        message
        data
     */
+       console.log(success);
     if (success.status && success.status == 200) {
       if (
         success.data.code == 500 ||
