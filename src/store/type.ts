@@ -15,3 +15,11 @@ export interface Lab{
     number?: number;
     detail?: string;
 }
+
+export interface User{
+    id?: number;
+    name?: string;
+    username?: string;
+    password?: string;
+    roles?: Role[];
+}

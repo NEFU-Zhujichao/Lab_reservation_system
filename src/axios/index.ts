@@ -44,8 +44,8 @@ axios.interceptors.response.use(
   },
   (error) => {
     console.log(error.response);
-    if (error.response.status == 504 || error.response.status == 404) {
-      ElMessage.error("服务器被吃了啊！！！" );
+    if (error.response.status == 504 || error.response.status == 404 || error.response.status == 500) {
+      ElMessage.error("您的操作有误啊！！！" );
     } else if (error.response.data.code == 403) {
       ElMessage.error("权限不足");
     } else if (error.response.data.code == 401) {

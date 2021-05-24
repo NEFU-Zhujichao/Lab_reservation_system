@@ -19,13 +19,13 @@
         <el-menu router v-if="isAdmin">
           <el-submenu index="1">
             <template #title
-              ><i class="el-icon-location">实验室管理</i></template
+              ><i class="el-icon-s-tools">实验室管理</i></template
             >
             <el-menu-item index="/index/labs">实验室</el-menu-item>
-            <el-menu-item index="/index/test2">test2</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
-            <template #title><i class="el-icon-message">教师管理</i></template>
+            <template #title><i class="el-icon-s-custom">教师管理</i></template>
+            <el-menu-item index="/index/teachers">教师</el-menu-item>
           </el-submenu>
         </el-menu>
         <el-menu v-else>
@@ -52,11 +52,7 @@
 import { defineComponent, ref, Ref } from "vue";
 import axios from "@/axios";
 import { useRouter } from "vue-router";
-
-export interface Role {
-  id?: number;
-  name?: string;
-}
+import { Role } from "@/store/type";
 
 function useUser(user: Ref<any>, isAdmin: Ref<boolean>) {
   const hasAdminRole = () =>

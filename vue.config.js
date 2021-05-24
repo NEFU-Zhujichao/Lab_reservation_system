@@ -5,6 +5,12 @@ module.exports = {
     port: 8081,
     // 设置代理
     proxy: {
+      "/": {
+        // 目标 API 地址
+        target: "http://localhost:8080",
+        // 将请求头的Host更改为target URL
+        changeOrigin: true,
+      },
       "/api/": {
         // 目标 API 地址
         target: "http://localhost:8080",

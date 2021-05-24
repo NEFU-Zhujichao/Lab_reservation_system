@@ -42,7 +42,6 @@
   </div>
 </template>
 <script lang="ts">
-import AppVue from "@/App.vue";
 import { defineComponent, ref, Ref } from "vue";
 import { ElMessage } from "element-plus";
 import axios from "@/axios/index";
@@ -55,7 +54,7 @@ interface LoginForm {
 }
 function useCaptcha(captcha: Ref<string>) {
   const updateCaptcha = () => {
-    captcha.value = "/captcha?time=" + new Date();
+    captcha.value = "/api/captcha?time=" + new Date();
   };
   return {
     updateCaptcha,
@@ -69,7 +68,7 @@ export default defineComponent({
       password: "123",
       code: "",
     };
-    const captchaUrl = ref("/captcha?time=" + new Date());
+    const captchaUrl = ref("/api/captcha?time=" + new Date());
     const loginFormRef = ref(loginForm);
     const checked = ref(true);
     const loading = ref(false);
