@@ -43,7 +43,6 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref, Ref } from "vue";
-import { ElMessage } from "element-plus";
 import axios from "@/axios/index";
 import { useRouter } from "vue-router";
 

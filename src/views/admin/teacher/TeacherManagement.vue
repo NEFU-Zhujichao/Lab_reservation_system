@@ -90,30 +90,21 @@
           </template>
         </el-table-column>
       </el-table>
-      <!--el-dialog title="编辑" v-model="dialogFormVisible">
-        <el-form :model="updateLabForm">
-          <el-tag class="dialog-tag">实验室名称</el-tag>
+      <el-dialog title="编辑" v-model="dialogFormVisible">
+        <el-form :model="updateTeacherForm">
+          <el-tag class="dialog-tag">编号</el-tag>
           <el-form-item :label-width="formLabelWidth">
             <el-input
-              v-model="updateLabForm.name"
+              v-model="updateTeacherForm.id"
               autocomplete="off"
               class="dialog-input"
               size="small"
             ></el-input>
           </el-form-item>
-          <el-tag class="dialog-tag">实验室机器数量</el-tag>
+          <el-tag class="dialog-tag">真实姓名</el-tag>
           <el-form-item :label-width="formLabelWidth">
             <el-input
-              v-model="updateLabForm.number"
-              autocomplete="off"
-              class="dialog-input"
-              size="small"
-            ></el-input>
-          </el-form-item>
-          <el-tag class="dialog-tag">实验室详细信息</el-tag>
-          <el-form-item :label-width="formLabelWidth">
-            <el-input
-              v-model="updateLabForm.detail"
+              v-model="updateTeacherForm.name"
               autocomplete="off"
               class="dialog-input"
               size="small"
@@ -122,11 +113,11 @@
         </el-form>
         <template #footer>
           <span class="dialog-footer">
-            <el-button @click="cancelDoUpdateLab">取 消</el-button>
-            <el-button type="primary" @click="doUpdateLab">确 定</el-button>
+            <el-button @click="cancelDoUpdateTeacher">取 消</el-button>
+            <el-button type="primary" @click="doUpdateTeacher">确 定</el-button>
           </span>
         </template>
-      </el-dialog-->
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -135,29 +126,64 @@ import store, { State } from "@/store";
 import { Role, User } from "@/store/type";
 import { useStore } from "vuex";
 import { computed, defineComponent, ref, Ref } from "vue";
-import { LIST_USERS } from "@/store/VuexTypes";
-import axios from "@/axios";
+import {
+  DELETE_USER,
+  LIST_USERS,
+  POST_USER,
+  UPDATE_USER,
+} from "@/store/VuexTypes";
 
-function useUsers(users: Ref<User>) {
+function useUsers(
+  users: Ref<User>,
+  dialogFormVisible: Ref<boolean>,
+  updateTeacherForm: Ref<User>
+) {
   const addUser = () => {
     let rolesId: number[] = [];
     users.value.roles?.forEach((r) => rolesId.push(r as number));
     users.value.roles = [];
     rolesId.forEach((r) => users.value.roles?.push({ id: r }));
     rolesId = [];
-    axios.post("/user/", users.value).then((resp) => {
+    store.dispatch(POST_USER, users.value).then((resp) => {
       if (resp) {
-        /*store.dispatch(LIST_USERS).then((resp) => {
-          users.value = { roles: [] };
-        });*/
         store.dispatch(LIST_USERS);
         users.value = { roles: [] };
       }
     });
   };
 
+  const updateUser = (index: number, data: User) => {
+    Object.assign(updateTeacherForm.value, data);
+    dialogFormVisible.value = true;
+  };
+
+  const doUpdateTeacher = () => {
+    dialogFormVisible.value = false;
+    store.dispatch(UPDATE_USER, updateTeacherForm.value).then((resp) => {
+      if (resp) {
+        store.dispatch(LIST_USERS);
+      }
+    });
+  };
+
+  const deleteUser = (index: number, data: User) => {
+    store.dispatch(DELETE_USER, data.id).then((resp) => {
+      if (resp) {
+        store.dispatch(LIST_USERS);
+      }
+    });
+  };
+
+  const cancelDoUpdateTeacher = () => {
+    dialogFormVisible.value = false;
+  };
+
   return {
     addUser,
+    updateUser,
+    doUpdateTeacher,
+    deleteUser,
+    cancelDoUpdateTeacher,
   };
 }
 
@@ -165,6 +191,8 @@ export default defineComponent({
   setup() {
     const store = useStore<State>();
     const userForm = ref<User>({ roles: [] });
+    const updateTeacherForm = ref<User>({ roles: [] });
+    const dialogFormVisible = ref(false);
     if (store.state.users?.length == 0) {
       store.dispatch(LIST_USERS);
     }
@@ -179,12 +207,24 @@ export default defineComponent({
         name: "TEACHER",
       },
     ];
-    const { addUser } = useUsers(userForm);
+    const {
+      addUser,
+      updateUser,
+      doUpdateTeacher,
+      deleteUser,
+      cancelDoUpdateTeacher,
+    } = useUsers(userForm, dialogFormVisible, updateTeacherForm);
     return {
       userForm,
       users,
       roles,
       addUser,
+      updateUser,
+      doUpdateTeacher,
+      deleteUser,
+      cancelDoUpdateTeacher,
+      updateTeacherForm,
+      dialogFormVisible,
     };
   },
 });

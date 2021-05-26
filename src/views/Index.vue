@@ -19,24 +19,28 @@
         <el-menu router v-if="isAdmin">
           <el-submenu index="1">
             <template #title
-              ><i class="el-icon-s-tools">实验室管理</i></template
+              ><i class="el-icon-s-tools"> 实验室管理</i></template
             >
             <el-menu-item index="/index/labs">实验室</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
-            <template #title><i class="el-icon-s-custom">教师管理</i></template>
+            <template #title
+              ><i class="el-icon-s-custom"> 教师管理</i></template
+            >
             <el-menu-item index="/index/teachers">教师</el-menu-item>
           </el-submenu>
         </el-menu>
-        <el-menu v-else>
+        <el-menu router v-else>
           <el-submenu index="1">
             <template #title
-              ><i class="el-icon-location"></i>课程实验管理</template
+              ><i class="el-icon-notebook-1"> 实验课程管理</i></template
             >
+            <el-menu-item index="/index/courses">课程</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
-            <template #title
-              ><i class="el-icon-location"></i>实验室预约</template
+            <template #title><i class="el-icon-date"> 实验室预约</i></template>
+            <el-menu-item index="/index/labReservation"
+              >实验室预约</el-menu-item
             >
           </el-submenu>
         </el-menu>
@@ -53,6 +57,7 @@ import { defineComponent, ref, Ref } from "vue";
 import axios from "@/axios";
 import { useRouter } from "vue-router";
 import { Role } from "@/store/type";
+import { useStore } from "vuex";
 
 function useUser(user: Ref<any>, isAdmin: Ref<boolean>) {
   const hasAdminRole = () =>
@@ -65,6 +70,7 @@ function useUser(user: Ref<any>, isAdmin: Ref<boolean>) {
 }
 export default defineComponent({
   setup(context) {
+    const store = useStore();
     const user = ref(JSON.parse(window.sessionStorage.getItem("user")!));
     const router = useRouter();
     const isAdmin = ref(false);
@@ -83,6 +89,8 @@ export default defineComponent({
         window.sessionStorage.removeItem("user");
         window.sessionStorage.removeItem("auth");
         window.sessionStorage.removeItem("tokenHeader");
+        // 清空vuex上的课程信息
+        store.state.courses = [];
         // 路由到登录页面
         router.replace("/");
         /*})

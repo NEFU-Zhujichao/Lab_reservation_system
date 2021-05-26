@@ -121,9 +121,8 @@
 import { computed, defineComponent, ref, Ref } from "vue";
 import store, { State } from "@/store";
 import { useStore } from "vuex";
-import { LIST_LABS } from "@/store/VuexTypes";
+import { DELETE_LAB, LIST_LABS, POST_LAB, UPDATE_LAB } from "@/store/VuexTypes";
 import { Lab } from "@/store/type";
-import axios from "@/axios";
 
 function useLab(
   labForm: Ref<Lab>,
@@ -131,7 +130,7 @@ function useLab(
   updateLabForm: Ref<Lab>
 ) {
   const addLab = () => {
-    axios.post("/lab/", labForm.value).then((resp) => {
+    store.dispatch(POST_LAB, labForm.value).then((resp) => {
       if (resp) {
         store.dispatch(LIST_LABS);
         labForm.value = {};
@@ -147,16 +146,15 @@ function useLab(
 
   const doUpdateLab = () => {
     dialogFormVisible.value = false;
-    axios.put("/lab/", updateLabForm.value).then((resp) => {
+    store.dispatch(UPDATE_LAB, updateLabForm.value).then((resp) => {
       store.dispatch(LIST_LABS);
     });
   };
   const cancelDoUpdateLab = () => {
     dialogFormVisible.value = false;
-    //store.dispatch(LIST_LABS);
   };
   const deleteLab = (index: number, data: Lab) => {
-    axios.delete(`/lab/${data.id}`).then((resp) => {
+    store.dispatch(DELETE_LAB, data.id).then((resp) => {
       // 等待删除成功后再去拉取实验室列表
       if (resp) {
         store.dispatch(LIST_LABS);

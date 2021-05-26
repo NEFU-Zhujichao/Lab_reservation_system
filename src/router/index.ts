@@ -20,6 +20,14 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "teachers",
         component: () => import("@/views/admin/teacher/TeacherManagement.vue")
+      },
+      {
+        path: "courses",
+        component: () => import("@/views/teacher/CourseManagement.vue")
+      },
+      {
+        path: "labReservation",
+        component: () => import("@/views/teacher/LabReservation.vue")
       }
     ]
   }

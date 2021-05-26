@@ -23,3 +23,10 @@ export interface User{
     password?: string;
     roles?: Role[];
 }
+
+export interface Course{
+    id?: number;
+    name?: string;
+    studentNumber?: number;
+    periods?: number;
+}
