@@ -122,81 +122,21 @@
           </span>
         </template>
       </el-dialog>
-      <!--table border="1px solid red">
-        <thead>
-          <th>第几节</th>
-          <th>Monday</th>
-          <th>Tuesday</th>
-          <th>Wednesday</th>
-          <th>Thursday</th>
-          <th>Friday</th>
-          <th>Saturday</th>
-          <th>Sunday</th>
-        </thead>
-        <tbody>
-          <tr v-for="rs in reservationState" :key="rs.sectionId">
-            <td>第{{ rs.sectionId }}节</td>
-            <td v-for="d in rs.days" :key="d.day">
-              <template v-for="c in d.checkboxs" :key="c.week">
-                <template v-if="c.week % 3 == 0">
-                  第{{ c.week }}周
-                  <input
-                    type="checkbox"
-                    :disabled="c.disabled"
-                    v-model="selectedCheckboxs"
-                    :value="{
-                      cid: courseIdRef,
-                      labname: labNameRef,
-                      week: c.week,
-                      section: rs.sectionId,
-                      day: d.day,
-                    }"
-                    @click="addAppointment"
-                  />
-                  <br />
-                </template>
-                <template v-else>
-                  第{{ c.week }}周
-                  <input
-                    type="checkbox"
-                    :disabled="c.disabled"
-                    v-model="selectedCheckboxs"
-                    :value="{
-                      cid: courseIdRef,
-                      labname: labNameRef,
-                      week: c.week,
-                      section: rs.sectionId,
-                      day: d.day,
-                    }"
-                    @click="addAppointment"
-                  />
-                </template>
-              </template>
-            </td>
-          </tr>
-        </tbody>
-      </table-->
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, computed, ref, Ref, watch } from "vue";
+import { defineComponent, computed, ref, Ref } from "vue";
 import store, { State } from "@/store";
 import { useStore } from "vuex";
 import {
   GET_APPOINTMENTS_BY_LAB_NAME,
-  GET_COURSE_BY_ID,
   GET_LABS_BY_COURSE_ID,
+  GET_SURPLUS_PERIODS,
   LIST_COURSES,
   POST_APPOINTMENT,
 } from "@/store/VuexTypes";
-import {
-  Appointment,
-  Course,
-  Lab,
-  listReservationState,
-  Section,
-} from "@/store/type";
+import { Appointment, Lab, listReservationState, Section } from "@/store/type";
 
 function useCourse(
   courseIdRef: Ref<number | undefined>,
@@ -225,10 +165,10 @@ function useAppoinment(
 ) {
   const queryAppointments = () => {
     store.state.listReservationState = listReservationState();
-    store.dispatch(GET_COURSE_BY_ID, courseIdRef.value).then((resp) => {
+    store.dispatch(GET_SURPLUS_PERIODS, courseIdRef.value).then((resp) => {
       if (resp) {
-        const data: Course = resp.data;
-        sumScores.value = data.periods!;
+        const data = resp.data;
+        sumScores.value = data;
       }
     });
     store
@@ -309,11 +249,15 @@ function useAppoinment(
         }
       });
     }
+    selectedCheckboxs.value = { reservationTimes: [] };
+    refScores.value = 0;
     dialogFormVisible.value = false;
   };
 
   const cancelAppointment = () => {
+    refScores.value = 0;
     dialogFormVisible.value = false;
+    selectedCheckboxs.value = { reservationTimes: [] };
   };
 
   const calculateScores = () => {

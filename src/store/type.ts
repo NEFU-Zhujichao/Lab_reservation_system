@@ -31,6 +31,13 @@ export interface Course{
     periods?: number;
 }
 
+export interface CourseWithUser{
+    id?: number;
+    name?: string;
+    username?: string;
+    courses?: Course[];
+}
+
 export interface reservationTime{
     id?: number;
     uid?: number;

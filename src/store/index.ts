@@ -58,7 +58,7 @@ const myActions: ActionTree<State,State> = {
       const resp = await axios.get(`/lab/${data}`);
       return resp;
      }
-  },
+   },
    /**
      * 教师
      */
@@ -115,7 +115,13 @@ const myActions: ActionTree<State,State> = {
     [vxt.POST_APPOINTMENT]: async ({commit},data) => {
       const resp = await axios.post("/appointment/", data);
       return resp;
-    }
+    },
+    [vxt.GET_SURPLUS_PERIODS]: async ({commit},data) => {
+      if(data){
+       const resp = await axios.get(`/appointment/periods/${data}`);
+       return resp;
+      }
+    },
 }
 export default createStore({
   state: myState,

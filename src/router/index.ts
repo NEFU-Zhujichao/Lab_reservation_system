@@ -26,10 +26,19 @@ const routes: Array<RouteRecordRaw> = [
         component: () => import("@/views/teacher/CourseManagement.vue")
       },
       {
+        path: "courses2",
+        component: () => import("@/views/admin/course/Courses.vue")
+      },
+      {
         path: "labReservation",
         component: () => import("@/views/teacher/LabReservation.vue")
       }
     ]
+  },
+  {
+    path: "/:pathMatch(.*)*",
+    name: "nomatch",
+    redirect: {name: "Login"}
   }
 ];
 

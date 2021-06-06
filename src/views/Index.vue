@@ -29,6 +29,12 @@
             >
             <el-menu-item index="/index/teachers">教师</el-menu-item>
           </el-submenu>
+          <el-submenu index="3">
+            <template #title
+              ><i class="el-icon-data-line"> 课程管理</i></template
+            >
+            <el-menu-item index="/index/courses">课程</el-menu-item>
+          </el-submenu>
         </el-menu>
         <el-menu router v-else>
           <el-submenu index="1">
