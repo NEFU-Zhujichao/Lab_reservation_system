@@ -37,43 +37,59 @@
         <el-table-column prop="section" label="节数" align="center" width="200">
         </el-table-column>
       </el-table>
+      <div class="pageData">
+        <el-pagination
+          background
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="total"
+          @current-change="currentChange"
+          @size-change="sizeChange"
+        >
+        </el-pagination>
+      </div>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { computed, defineComponent, ref, Ref } from "vue";
-import store, { State } from "@/store";
+import { defineComponent, ref } from "vue";
+import { State } from "@/store";
 import { useStore } from "vuex";
-import { GET_ALL_COURSES, LIST_COURSES, POST_COURSE } from "@/store/VuexTypes";
-import { Course, Courses } from "@/store/type";
+import { Reservation, RestPageBean } from "@/store/type";
 import axios from "@/axios";
-
-interface Reservation {
-  id?: number;
-  uid?: number;
-  uname?: string;
-  cid?: number;
-  cname?: string;
-  labName?: string;
-  week?: number;
-  day?: number;
-  section?: number;
-}
-
 export default defineComponent({
   setup() {
     const store = useStore<State>();
     const reservations = ref<Reservation[]>([]);
+    let total = ref(0);
+    let currentPage = ref(1);
+    let size = ref(10);
     function getReservations() {
-      axios.get("/reservationTime/").then((resp) => {
-        if (resp) {
-          reservations.value = resp.data;
-        }
-      });
+      axios
+        .get(
+          `/reservationTime/?currentPage=${currentPage.value}&size=${size.value}`
+        )
+        .then((resp) => {
+          if (resp) {
+            const data = resp;
+            total.value = (data as unknown as RestPageBean).total!;
+            reservations.value = resp.data;
+          }
+        });
     }
     getReservations();
+    function currentChange(current: number) {
+      currentPage.value = current;
+      getReservations();
+    }
+    function sizeChange(s: number) {
+      size.value = s;
+      getReservations();
+    }
     return {
       reservations,
+      total,
+      currentChange,
+      sizeChange,
     };
   },
 });
@@ -85,5 +101,9 @@ export default defineComponent({
 }
 .dialog-tag {
   margin-right: 20px;
+}
+.pageData {
+  display: flex;
+  justify-content: flex-end;
 }
 </style>

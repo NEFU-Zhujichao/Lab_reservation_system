@@ -4,6 +4,11 @@ export interface RespBean{
     data?: object;
 }
 
+export interface RestPageBean {
+  total?: number;
+  reservations?: Reservation[];
+}
+
 export interface Role {
     id?: number;
     name?: string;
@@ -37,6 +42,18 @@ export interface Courses {
   courseName?: string;
   studentNumber?: number;
   periods?: number;
+}
+
+export interface Reservation {
+  id?: number;
+  uid?: number;
+  uname?: string;
+  cid?: number;
+  cname?: string;
+  labName?: string;
+  week?: number;
+  day?: number;
+  section?: number;
 }
 
 export interface reservationTime{
