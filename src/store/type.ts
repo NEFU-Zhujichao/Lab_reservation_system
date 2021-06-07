@@ -31,11 +31,12 @@ export interface Course{
     periods?: number;
 }
 
-export interface CourseWithUser{
-    id?: number;
-    name?: string;
-    username?: string;
-    courses?: Course[];
+export interface Courses {
+  name?: string;
+  id?: number;
+  courseName?: string;
+  studentNumber?: number;
+  periods?: number;
 }
 
 export interface reservationTime{

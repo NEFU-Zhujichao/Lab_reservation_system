@@ -21,6 +21,7 @@ export const DELETE_USER = "DELETE_USER";
  export const UPDATE_COURSE = "UPDATE_COURSE";
  export const DELETE_COURSE = "DELETE_COURSE";
  export const GET_COURSE_BY_ID = "GET_COURSE_BY_ID";
+ export const GET_ALL_COURSES = "GET_ALL_COURSES";
  /**
  * 预约
  */

@@ -1,6 +1,6 @@
 import { ActionTree, createStore, MutationTree } from "vuex";
 import * as vxt from "@/store/VuexTypes";
-import { Appointment, Course, Lab, Section, User } from "@/store/type";
+import { Appointment, Course, Lab, Section, User,Courses } from "@/store/type";
 import axios from "@/axios";
 
 
@@ -10,6 +10,7 @@ export interface State{
   courses: Course[];
   appoinments?: Appointment[];
   listReservationState: Section[];
+  allCourses?: Courses[];
 }
 
 const myState: State = {
@@ -17,7 +18,8 @@ const myState: State = {
   users: [],
   courses: [],
   appoinments: [],
-  listReservationState: []
+  listReservationState: [],
+  allCourses: []
 }
 
 const myMutations: MutationTree<State> = {
@@ -29,7 +31,8 @@ const myMutations: MutationTree<State> = {
   [vxt.UPDATE_USER]: (state,data) => state.users = data,
   // 课程
   [vxt.LIST_COURSES]: (state,data) => state.courses = data,
-  [vxt.UPDATE_COURSE]: (state,data) => state.courses = data
+  [vxt.UPDATE_COURSE]: (state,data) => state.courses = data,
+  [vxt.GET_ALL_COURSES]: (state,data) => state.allCourses = data
 }
 
 const myActions: ActionTree<State,State> = {
@@ -105,6 +108,10 @@ const myActions: ActionTree<State,State> = {
       return resp;
      }
    },
+   [vxt.GET_ALL_COURSES]: async ({commit},data) => {
+    const resp = await axios.get("/course/")
+    return resp;
+  },
    /**
      * 预约
      */

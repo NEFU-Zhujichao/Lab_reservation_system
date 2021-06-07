@@ -33,7 +33,11 @@
             <template #title
               ><i class="el-icon-data-line"> 课程管理</i></template
             >
-            <el-menu-item index="/index/courses">课程</el-menu-item>
+            <el-menu-item index="/index/courses2">课程</el-menu-item>
+          </el-submenu>
+          <el-submenu index="4">
+            <template #title><i class="el-icon-watch"> 预约管理</i></template>
+            <el-menu-item index="/index/Reservation">预约</el-menu-item>
           </el-submenu>
         </el-menu>
         <el-menu router v-else>

@@ -2,7 +2,7 @@
   <div>
     <div>
       <div>
-        <!--el-form ref="form" :model="courseForm" label-width="80px">
+        <el-form ref="form" :model="courseForm" label-width="80px">
           <el-input
             v-model="courseForm.name"
             size="mini"
@@ -33,11 +33,11 @@
             @click="addCourse"
             >添加</el-button
           >
-        </el-form-->
+        </el-form>
       </div>
     </div>
     <div>
-      <el-table :data="courses" stripe type="2">
+      <el-table :data="allCourses" stripe type="2">
         <el-table-column
           prop="id"
           label="编号"
@@ -46,6 +46,13 @@
         ></el-table-column>
         <el-table-column
           prop="name"
+          label="授课教师名字"
+          align="center"
+          width="200"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="courseName"
           label="实验课程名称"
           width="200"
           align="center"
@@ -58,58 +65,81 @@
           width="200"
         >
         </el-table-column>
+
+        <el-table-column
+          prop="periods"
+          label="实验课程学时数"
+          align="center"
+          width="200"
+        >
+        </el-table-column>
       </el-table>
     </div>
   </div>
 </template>
 <script lang="ts">
-import { defineComponent, ref, Ref } from "vue";
+import { computed, defineComponent, ref, Ref } from "vue";
 import store, { State } from "@/store";
 import { useStore } from "vuex";
-import { LIST_COURSES, POST_COURSE } from "@/store/VuexTypes";
-import { Course, CourseWithUser } from "@/store/type";
+import { GET_ALL_COURSES, LIST_COURSES, POST_COURSE } from "@/store/VuexTypes";
+import { Course, Courses } from "@/store/type";
 import axios from "@/axios";
 
-function useCourse(courseForm: Ref<Course>, currentUserId: number) {
+interface CourseWithUser {
+  id?: number;
+  name?: string;
+  courses?: Course[];
+}
+
+function useCourse(
+  courseForm: Ref<Course>,
+  allCourses: Ref<Courses[] | undefined>
+) {
   const addCourse = () => {
     store.dispatch(POST_COURSE, courseForm.value).then((resp) => {
       if (resp) {
-        store.dispatch(LIST_COURSES, currentUserId);
         courseForm.value = {};
+        store.state.allCourses = [];
+        getCourses();
+      }
+    });
+  };
+
+  const getCourses = () => {
+    store.dispatch(GET_ALL_COURSES).then((resp) => {
+      if (resp) {
+        const data: CourseWithUser[] = resp.data;
+        data.forEach((cWU) => {
+          cWU.courses?.forEach((c) => {
+            if (allCourses.value != null) {
+              allCourses.value.push({
+                id: c.id,
+                name: cWU.name,
+                courseName: c.name,
+                studentNumber: c.studentNumber,
+                periods: c.periods,
+              });
+            }
+          });
+        });
       }
     });
   };
   return {
     addCourse,
+    getCourses,
   };
 }
 
 export default defineComponent({
   setup() {
     const store = useStore<State>();
-    const currentUserId = JSON.parse(sessionStorage.getItem("user")!).id;
-    if (store.state.courses?.length == 0) {
-      store.dispatch(LIST_COURSES, currentUserId);
-    }
-    let courses = ref<Course[]>();
-    function getCourses() {
-      axios.get("/course/").then((resp) => {
-        if (resp) {
-          const data: CourseWithUser[] = resp.data;
-          data.forEach((cU) => {
-            cU.courses?.forEach((c) => {
-              console.log("c=" + c);
-              courses.value?.push(c);
-            });
-          });
-        }
-      });
-    }
-    getCourses();
+    const allCourses = computed(() => store.state.allCourses);
     const courseForm = ref<Course>({});
-    const { addCourse } = useCourse(courseForm, currentUserId);
+    const { addCourse, getCourses } = useCourse(courseForm, allCourses);
+    if (allCourses.value?.length == 0) getCourses();
     return {
-      courses,
+      allCourses,
       courseForm,
       addCourse,
     };

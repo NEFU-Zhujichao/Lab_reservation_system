@@ -32,6 +32,10 @@ const routes: Array<RouteRecordRaw> = [
       {
         path: "labReservation",
         component: () => import("@/views/teacher/LabReservation.vue")
+      },
+      {
+        path: "Reservation",
+        component: () => import("@/views/admin/lab/Reservation.vue")
       }
     ]
   },
