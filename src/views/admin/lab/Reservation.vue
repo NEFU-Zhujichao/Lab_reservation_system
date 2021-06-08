@@ -1,6 +1,10 @@
 <template>
   <div>
     <div>
+      <el-button type="success" @click="exportData">
+        <i class="fa fa-level-down" aria-hidden="true"></i>
+        导出预约信息</el-button
+      >
       <el-table :data="reservations" stripe type="2">
         <el-table-column
           prop="id"
@@ -52,13 +56,11 @@
 </template>
 <script lang="ts">
 import { defineComponent, ref } from "vue";
-import { State } from "@/store";
-import { useStore } from "vuex";
 import { Reservation, RestPageBean } from "@/store/type";
 import axios from "@/axios";
+import service from "@/axios/download";
 export default defineComponent({
   setup() {
-    const store = useStore<State>();
     const reservations = ref<Reservation[]>([]);
     let total = ref(0);
     let currentPage = ref(1);
@@ -85,11 +87,15 @@ export default defineComponent({
       size.value = s;
       getReservations();
     }
+    function exportData() {
+      service.get("/reservationTime/export/");
+    }
     return {
       reservations,
       total,
       currentChange,
       sizeChange,
+      exportData,
     };
   },
 });

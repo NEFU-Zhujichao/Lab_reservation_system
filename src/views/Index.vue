@@ -56,7 +56,7 @@
         </el-menu>
       </el-aside>
       <el-main>
-        <div>欢迎来到实验室预约管理系统</div>
+        <div class="welcome">欢迎来到实验室预约管理系统</div>
         <router-view />
       </el-main>
     </el-container>
@@ -132,6 +132,12 @@ export default defineComponent({
 }
 .indexHeader .indexTitle {
   color: white;
+  font-size: 30px;
+  font-family: "Times New Roman", Times, serif;
+}
+.welcome {
+  display: flex;
+  justify-content: center;
   font-size: 30px;
   font-family: "Times New Roman", Times, serif;
 }
