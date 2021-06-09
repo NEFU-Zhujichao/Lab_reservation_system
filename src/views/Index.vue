@@ -1,5 +1,5 @@
 <template>
-  <el-container>
+  <el-container class="container">
     <el-header class="indexHeader">
       <div class="indexTitle">实验室预约管理系统</div>
       <el-dropdown @command="commandHandler">
@@ -140,5 +140,9 @@ export default defineComponent({
   justify-content: center;
   font-size: 30px;
   font-family: "Times New Roman", Times, serif;
+}
+.container {
+  background: url("../assets/body.png");
+  height: 100vh;
 }
 </style>
