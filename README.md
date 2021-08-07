@@ -47,4 +47,4 @@
 3. 编写 vue.config.js 编写前后端跨域的代理配置
 4. 前后端联调登录验证码的api接口调用
 ### 2021/5/17
-1. 添加element-plus完成基本的ui调用
+1. 添加element-plus完成基本的ui调用 
